@@ -23,7 +23,7 @@ export default function BookCard({ title, author, price, discount, rating, bookI
       }}
       elevation={9}
     >
-      <div style={{display : discount ? 'block' : 'none'}} className={styles.discount}>{discount} OFF</div>
+      <div style={{display : discount ? 'block' : 'none'}} className={styles.discount}>{discount}% OFF</div>
       <CardMedia
         component="img"
         alt="N/A"

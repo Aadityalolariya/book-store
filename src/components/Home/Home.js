@@ -1,86 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Home.module.css";
 import BookCard from "../BookCard/BookCard.js";
 import Filters from "./Filters/Filters";
-
-const data = [
-  {
-    author: "author name",
-    price: "300",
-    discount: "10%",
-    title: "book title",
-    rating: 4,
-    bookImage : '/book1.jpeg'
-  },
-  {
-    author: "author name2",
-    price: "200",
-    discount: "",
-    title: "book title2",
-    rating: 2,
-    bookImage : '/book1.jpeg'
-  },
-  {
-    author: "author name",
-    price: "300",
-    discount: "10%",
-    title: "book title",
-    rating: 4,
-    bookImage : '/book1.jpeg'
-  },
-  {
-    author: "author name2",
-    price: "200",
-    discount: "",
-    title: "book title2",
-    rating: 5,
-    bookImage : '/book1.jpeg'
-  },
-  {
-    author: "author name",
-    price: "300",
-    discount: "10%",
-    title: "book title",
-    rating: 4,
-    bookImage : '/book1.jpeg'
-  },
-  {
-    author: "author name2",
-    price: "200",
-    discount: "",
-    title: "book title2",
-    rating: 5,
-    bookImage : '/book1.jpeg'
-  },
-  {
-    author: "author name",
-    price: "300",
-    discount: "10%",
-    title: "book title",
-    rating: 4,
-    bookImage : '/book1.jpeg'
-  },
-];
+import { db } from "../firebaseConfig";
+import { collection, getDocs, query } from "firebase/firestore";
 
 export default function Home() {
+  const [books, setBooks] = useState([]);
+  const [search, setSearch] = useState("");
+  const [minMax, setMinMax] = useState({ min: 0, max: Infinity });
 
-    const [price, setPrice] = useState('')
+  useEffect(() => {
+    const getBookData = async () => {
+      try {
+        const dataFetched = await getDocs(query(collection(db, "books")));
+        dataFetched.forEach((element) => {
+          setBooks((prev) => [...prev, element.data()]);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBookData();
+  }, []);
+
   return (
     <>
-    <Filters setPrice = {setPrice} price = {price}/>
+      <Filters setMinMax={setMinMax} search = {search} setSearch = {setSearch} books={books}/>
       <div className={styles.container}>
-        {data.map((element, index) => {
-          return (
-            <BookCard
-              author={element.author}
-              discount={element.discount}
-              price={element.price}
-              title={element.title}
-              rating={element.rating}
-              bookImage = {element.bookImage}
-              key={`Book_Key_${index}`}
-            />
-          );
+        {books.map((element, index) => {
+          if (element.price <= minMax.max && element.price >= minMax.min && element.title.includes(search)) {
+            return (
+              <BookCard
+                author={element.author}
+                discount={element.discount}
+                price={element.price}
+                title={element.title}
+                rating={element.rating}
+                bookImage="/book1.jpeg"
+                key={`Book_Key_${index}`}
+              />
+            );
+          }
+          else return (<></>);
         })}
       </div>
     </>

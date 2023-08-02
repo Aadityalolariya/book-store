@@ -2,7 +2,8 @@ import BookCard from './components/BookCard/BookCard';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './components/Layout';
 import Home from './components/Home/Home';
-
+import Login from './components/Login/Login';
+import Signup from './components/Signup/Signup';
 function App() {
   return (
     <>
@@ -13,7 +14,8 @@ function App() {
 
         <Route path='/' element={<Layout/>}>
         <Route path='/' element={<Home/>}></Route>
-
+        <Route path='/login' element={<Login/>}></Route>
+        <Route path='/signup' element={<Signup/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
