@@ -6,7 +6,6 @@ export default function Layout() {
     <>
         <Navbar/>
         <Outlet/>
-        <div>This is footer</div>
     </>
   )
 }

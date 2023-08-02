@@ -96,6 +96,7 @@ export default function SignInSide() {
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                 />
+                
                 <Button
                   type="submit"
                   fullWidth
@@ -104,6 +105,7 @@ export default function SignInSide() {
                 >
                   Sign In
                 </Button>
+
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">
