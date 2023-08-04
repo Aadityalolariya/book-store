@@ -8,16 +8,18 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
+import Badge from '@mui/material/Badge';
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Link } from "react-router-dom";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-function ResponsiveAppBar() {
+const ResponsiveAppBar = ({ cartCount }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -127,20 +129,25 @@ function ResponsiveAppBar() {
           </Box>
 
           <Tooltip title="Cart">
-            <IconButton
-              onClick={handleOpenUserMenu}
-              sx={{ p: 0, marginRight: "2rem", marginTop: "4px" }}
-            >
-              <AddShoppingCartIcon style={{ color: "white" }} />
-            </IconButton>
+            <Link to="/cart">
+              <IconButton
+                onClick={handleOpenUserMenu}
+                sx={{ p: 0, marginRight: "2rem", marginTop: "4px" }}
+              >
+                <Badge badgeContent={cartCount} color="success">
+                  <AddShoppingCartIcon style={{ color: "white" }} />
+                </Badge>
+              </IconButton>
+            </Link>
           </Tooltip>
-
-          <Button variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Logout
-          </Button>
+          <Link to="/login">
+            <Button variant="contained" sx={{ mt: 3, mb: 2 }}>
+              Login
+            </Button>
+          </Link>
         </Toolbar>
       </Container>
-    </AppBar>
+    </AppBar >
   );
 }
 export default ResponsiveAppBar;

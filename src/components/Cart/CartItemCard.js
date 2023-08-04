@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from 'react';
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -6,10 +6,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Rating } from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import styles from "./BookCard.module.css";
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
-export default function BookCard({ title, author, price, discount, rating, bookImage, addToCart, id }) {
+export const CartItemCard = ({ title, author, price, rating, bookImage, removeFromCart, id }) => {
   return (
     <Card
       sx={{
@@ -23,7 +22,6 @@ export default function BookCard({ title, author, price, discount, rating, bookI
       }}
       elevation={9}
     >
-      <div style={{display : discount ? 'block' : 'none'}} className={styles.discount}>{discount}% OFF</div>
       <CardMedia
         component="img"
         alt="N/A"
@@ -55,12 +53,12 @@ export default function BookCard({ title, author, price, discount, rating, bookI
       </CardContent>
       <CardActions sx={{ padding: "0px" }}>
         <Button 
-        startIcon={<ShoppingCartIcon />} sx={{ margin: "auto" }}
-        onClick={() => addToCart(id)}
+        startIcon={<RemoveShoppingCartIcon />} sx={{ margin: "auto" }}
+        onClick={() => removeFromCart(id)}
         >
-          Add to Cart
+          Remove from Cart
         </Button>
       </CardActions>
     </Card>
-  );
+  )
 }
