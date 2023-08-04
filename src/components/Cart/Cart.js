@@ -16,7 +16,10 @@ const Cart = ({
         const getBookData = async () => {
             try {
                 // get only book those id in bookids
-                if (bookids.length === 0) return;
+                if (bookids.length === 0) {
+                    setBooks([]);
+                    return;
+                }
                 const dataFetched = await getDocs(query(collection(db, "books"), where("id", "in", bookids)));
                 const tempBooks = dataFetched.docs.map((doc) => doc.data());
                 setBooks(tempBooks);
@@ -30,7 +33,8 @@ const Cart = ({
     // handle remove from cart
     const handleRemoveFromCart = (id) => {
         removeFromCart(id);
-        setBookIds(bookids.filter((bookid) => bookid !== id));
+        console.log(bookids.filter((bookid) => bookid !== id));
+        setBookIds((prev) => prev.filter((bookid) => bookid !== id));
     }
 
     return (
