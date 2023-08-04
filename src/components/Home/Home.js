@@ -15,7 +15,7 @@ export default function Home({ addToCart }) {
       try {
         const dataFetched = await getDocs(query(collection(db, "books")));
         dataFetched.forEach((element) => {
-          setBooks((prev) => [...prev, element.data()]);
+          setBooks((prev) => [...prev, {...element.data(), bookId : element.id}]);
         });
       } catch (error) {
         console.log(error);
@@ -41,6 +41,7 @@ export default function Home({ addToCart }) {
                 key={`Book_Key_${index}`}
                 addToCart={addToCart}
                 id={element.id}
+                bookId = {element.bookId}
               />
             );
           }
