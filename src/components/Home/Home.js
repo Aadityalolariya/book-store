@@ -5,7 +5,7 @@ import Filters from "./Filters/Filters";
 import { db } from "../firebaseConfig";
 import { collection, getDocs, query } from "firebase/firestore";
 
-export default function Home() {
+export default function Home({ addToCart }) {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [minMax, setMinMax] = useState({ min: 0, max: Infinity });
@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <>
-      <Filters setMinMax={setMinMax} search = {search} setSearch = {setSearch} books={books}/>
+      <Filters setMinMax={setMinMax} search={search} setSearch={setSearch} books={books} />
       <div className={styles.container}>
         {books.map((element, index) => {
           if (element.price <= minMax.max && element.price >= minMax.min && element.title.includes(search)) {
@@ -39,6 +39,8 @@ export default function Home() {
                 rating={element.rating}
                 bookImage="/book1.jpeg"
                 key={`Book_Key_${index}`}
+                addToCart={addToCart}
+                id={element.id}
               />
             );
           }

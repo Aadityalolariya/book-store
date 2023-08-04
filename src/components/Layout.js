@@ -1,10 +1,12 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import  Navbar from './Navbar/Navbar'
-export default function Layout() {
+export default function Layout({ cartCount }) {
   return (
     <>
-        <Navbar/>
+        <Navbar
+          cartCount={cartCount}
+        />
         <Outlet/>
     </>
   )
