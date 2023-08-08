@@ -1,62 +1,55 @@
-import React, { useState, useEffect } from 'react'
-import { db } from "../firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { CartItemCard } from './CartItemCard';
-import style from './Cart.module.css';
+import React, { useState, useEffect } from "react";
+import { CartItemCard } from "./CartItemCard";
+import style from "./Cart.module.css";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
-const Cart = ({
-    removeFromCart,
-}) => {
-    const [books, setBooks] = useState([]);
-    const [bookids, setBookIds] = useState(
-        () => JSON.parse(localStorage.getItem('cartBookIds')) || []
-    );
+const Cart = ({ removeFromCart }) => {
+  const [books, setBooks] = useState([]);
+ 
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
-    useEffect(() => {
-        const getBookData = async () => {
-            try {
-                // get only book those id in bookids
-                if (bookids.length === 0) {
-                    setBooks([]);
-                    return;
-                }
-                const dataFetched = await getDocs(query(collection(db, "books"), where("id", "in", bookids)));
-                const tempBooks = dataFetched.docs.map((doc) => doc.data());
-                setBooks(tempBooks);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getBookData();
-    }, [bookids]); // Make sure to run the effect whenever bookids change
+  useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const allCartItems = (
+          await axios.get(
+            `https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`
+          )
+        ).data;
+        console.log(allCartItems.result);
+        setBooks(allCartItems.result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCartItems();
+  }, []); // Make sure to run the effect whenever bookids change
 
-    // handle remove from cart
-    const handleRemoveFromCart = (id) => {
-        removeFromCart(id);
-        console.log(bookids.filter((bookid) => bookid !== id));
-        setBookIds((prev) => prev.filter((bookid) => bookid !== id));
-    }
 
-    return (
-        <div className={style.container}>
-            {books.length === 0 ? (
-                <p>Cart is empty.</p>
-            ) : (
-                books.map((element, index) => (
-                    <CartItemCard
-                        author={element.author}
-                        price={element.price}
-                        title={element.title}
-                        rating={element.rating}
-                        bookImage="/book1.jpeg"
-                        key={`Book_Key_${index}`}
-                        id={element.id}
-                        removeFromCart={handleRemoveFromCart}
-                    />
-                ))
-            )}
-        </div>
-    )
-}
+  return (
+    <div className={style.container}>
+      {books.length === 0 ? (
+        <p>Cart is empty.</p>
+      ) : (
+        books.map((element, index) => {
+          return (
+            <CartItemCard
+              removeFromCart={removeFromCart}
+              description={element.book.description}
+              name={element.book.name}
+              price={element.book.price}
+              bookImage={element.book.base64image}
+              key={`Book_Key_${element.book.id}`}
+              id={element.book.id}
+              category={element.book.category}
+              setBooks = {setBooks}
+            />
+          );
+        })
+      )}
+    </div>
+  );
+};
 
 export default Cart;

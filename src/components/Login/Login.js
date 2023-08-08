@@ -9,19 +9,42 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
+import { useCookies } from 'react-cookie';
+import bookImg from '../bookImg.jpg';
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+
+  const handleLogin = async () => {
+    if(email === '' || password === ''){
+      alert('Please provide all the credentials!!!');
+      return;
+    }
+
+    try {
+      const dataFetched = await axios.post(
+        "https://book-e-sell-node-api.vercel.app/api/user/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      const userData = dataFetched.data;
+      console.log(userData);
+      setCookie('user', JSON.stringify(userData), { path: '/' });
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="lg" sx = {{marginBottom : '4rem'}}>
       <Box
         sx={{
           marginTop: 8,
@@ -35,7 +58,8 @@ export default function SignInSide() {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: "url(https://source.unsplash.com/random)",
+              // backgroundImage: "url(https://source.unsplash.com/random)",
+              backgroundImage: `url(${bookImg})`,
               backgroundRepeat: "no-repeat",
               backgroundColor: (t) =>
                 t.palette.mode === "light"
@@ -66,12 +90,7 @@ export default function SignInSide() {
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
-              <Box
-                component="form"
-                noValidate
-                onSubmit={handleSubmit}
-                sx={{ mt: 1 }}
-              >
+              <Box noValidate sx={{ mt: 1 }}>
                 <TextField
                   margin="normal"
                   required
@@ -81,6 +100,8 @@ export default function SignInSide() {
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <TextField
                   margin="normal"
@@ -91,17 +112,16 @@ export default function SignInSide() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
-                />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 
+
                 <Button
-                  type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  onClick={handleLogin}
                 >
                   Sign In
                 </Button>
