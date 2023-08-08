@@ -13,8 +13,9 @@ import IconButton from "@mui/material/IconButton";
 
 export default function Filters({ setMinMax, search, setSearch, books }) {
   const [price, setPrice] = useState("");
+  const [searchText, setSearchText] = useState("");
 
-  const handleChange = (event) => {
+  const handlePriceChange = (event) => {
     setPrice(event.target.value);
     const newPrice = event.target.value;
     let max, min;
@@ -36,8 +37,6 @@ export default function Filters({ setMinMax, search, setSearch, books }) {
     setMinMax({ min: min, max: max });
   };
 
-
-
   return (
     <>
       <Paper
@@ -51,12 +50,16 @@ export default function Filters({ setMinMax, search, setSearch, books }) {
           </InputLabel>
 
           <OutlinedInput
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
+            onChange={(e) => setSearchText(e.target.value)}
+            value={searchText}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
-                <IconButton aria-label="toggle password visibility" edge="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  edge="end"
+                  onClick={(e) => setSearch(searchText)}
+                >
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>
@@ -72,7 +75,7 @@ export default function Filters({ setMinMax, search, setSearch, books }) {
             id="demo-simple-select"
             value={price}
             label="Price"
-            onChange={handleChange}
+            onChange={handlePriceChange}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="<100"> &lt;100</MenuItem>

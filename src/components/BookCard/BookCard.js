@@ -11,27 +11,23 @@ import styles from "./BookCard.module.css";
 import { useNavigate } from "react-router-dom";
 
 export default function BookCard({
-  title,
-  author,
+  description,
+  name,
   price,
-  discount,
-  rating,
   bookImage,
   addToCart,
   id,
-  bookId,
+  category,
 }) {
   const navigate = useNavigate();
   const handleCardClick = () => {
-    navigate({
-      pathname: "/book",
-      search: `?bookid=${bookId}`,
-    });
+   
+    navigate({pathname : "/book", search : `?id=${id}`});
   };
   return (
     <Card
       sx={{
-        maxWidth: 200,
+        width: 200,
         padding: "1rem",
         margin: "auto",
         position: "relative",
@@ -41,12 +37,6 @@ export default function BookCard({
       }}
       elevation={9}
     >
-      <div
-        style={{ display: discount ? "block" : "none" }}
-        className={styles.discount}
-      >
-        {discount}% OFF
-      </div>
       <div onClick={handleCardClick}>
         <CardMedia component="img" alt="N/A" height="auto" image={bookImage} />
         <CardContent className={styles.content}>
@@ -56,21 +46,21 @@ export default function BookCard({
             sx={{ fontWeight: "bold" }}
             component="div"
           >
-            {title}
+            {name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Author: </b>
-            {author}
+            <b>Category: </b>
+            {category}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            <b>Description: </b>
+            {description.slice(0, 100)}
+            {description.length > 100 ? "..." : ""}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             <b>Price: </b>
             &#8377;{price}
           </Typography>
-          <div
-            style={{ width: "100%", textAlign: "center", marginTop: "0.2rem" }}
-          >
-            <Rating name="read-only" value={rating} readOnly />
-          </div>
         </CardContent>
       </div>
       <CardActions sx={{ padding: "0px" }}>

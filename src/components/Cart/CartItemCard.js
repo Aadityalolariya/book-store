@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -6,9 +6,30 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Rating } from "@mui/material";
-import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 
-export const CartItemCard = ({ title, author, price, rating, bookImage, removeFromCart, id }) => {
+export const CartItemCard = ({
+  removeFromCart,
+  description,
+  name,
+  price,
+  bookImage,
+  id,
+  category,
+  setBooks,
+}) => {
+  const handleRemoveItem = (id) => {
+    setBooks((prev) => {
+      let updatedList = [];
+      prev.forEach(element => {
+        if(id !== element.book.id){
+          updatedList.push(element);
+        }
+      });
+      return updatedList;
+    })
+    removeFromCart(id);
+  }
   return (
     <Card
       sx={{
@@ -18,16 +39,11 @@ export const CartItemCard = ({ title, author, price, rating, bookImage, removeFr
         position: "relative",
         justifyContent: "center",
         alignItems: "center",
-        marginY : '1rem'
+        marginY: "1rem"
       }}
       elevation={9}
     >
-      <CardMedia
-        component="img"
-        alt="N/A"
-        height="auto"
-        image={bookImage}
-      />
+      <CardMedia component="img" alt="N/A" height="auto" image={bookImage} />
       <CardContent sx={{ paddingBottom: "0rem" }}>
         <Typography
           gutterBottom
@@ -35,30 +51,28 @@ export const CartItemCard = ({ title, author, price, rating, bookImage, removeFr
           sx={{ fontWeight: "bold" }}
           component="div"
         >
-          {title}
+          {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          <b>Author: </b>
-          {author}
+          <b>Description: </b>
+          {description}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           <b>Price: </b>
           &#8377;{price}
         </Typography>
-        <div
-          style={{ width: "100%", textAlign: "center", marginTop: "0.2rem" }}
-        >
-          <Rating name="read-only" value={rating} readOnly />
-        </div>
+        
       </CardContent>
       <CardActions sx={{ padding: "0px" }}>
-        <Button 
-        startIcon={<RemoveShoppingCartIcon />} sx={{ margin: "auto" }}
-        onClick={() => removeFromCart(id)}
+        <Button
+          startIcon={<RemoveShoppingCartIcon />}
+          sx={{ margin: "auto" }}
+          // onClick={() => removeFromCart(id)}
+          onClick={() => handleRemoveItem(id)}
         >
           Remove from Cart
         </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};

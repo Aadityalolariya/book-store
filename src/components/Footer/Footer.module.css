@@ -1,0 +1,20 @@
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background-color: rgb(59, 59, 59);
+    height: 20vh;
+}
+
+.list > li{
+    margin: 1rem;
+}
+
+.list > li > a{
+    color: white;
+    text-decoration: none;
+}
+
+.list{
+    list-style: none;
+}
