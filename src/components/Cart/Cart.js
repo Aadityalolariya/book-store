@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { CartItemCard } from "./CartItemCard";
 import style from "./Cart.module.css";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { UserContext } from "../UserContext";
 
-const Cart = ({ removeFromCart }) => {
-  const [books, setBooks] = useState([]);
- 
+const Cart = () => {
+  const [cartBooks, setCartBooks] = useState([]);
+  const {removeFromCart} = useContext(UserContext);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   useEffect(() => {
@@ -17,25 +18,25 @@ const Cart = ({ removeFromCart }) => {
             `https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`
           )
         ).data;
-        console.log(allCartItems.result);
-        setBooks(allCartItems.result);
+        setCartBooks(allCartItems.result);
       } catch (error) {
         console.log(error);
       }
     };
-    getCartItems();
+    if(cookies.user){
+      getCartItems();
+    }
   }, []); // Make sure to run the effect whenever bookids change
 
 
   return (
     <div className={style.container}>
-      {books.length === 0 ? (
+      {cartBooks.length === 0 ? (
         <p>Cart is empty.</p>
       ) : (
-        books.map((element, index) => {
+        cartBooks.map((element, index) => {
           return (
             <CartItemCard
-              removeFromCart={removeFromCart}
               description={element.book.description}
               name={element.book.name}
               price={element.book.price}
@@ -43,7 +44,7 @@ const Cart = ({ removeFromCart }) => {
               key={`Book_Key_${element.book.id}`}
               id={element.book.id}
               category={element.book.category}
-              setBooks = {setBooks}
+              setCartBooks = {setCartBooks}
             />
           );
         })
