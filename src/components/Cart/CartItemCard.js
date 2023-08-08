@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -7,19 +7,20 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Rating } from "@mui/material";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
+import { UserContext } from "../UserContext";
 
 export const CartItemCard = ({
-  removeFromCart,
   description,
   name,
   price,
   bookImage,
   id,
   category,
-  setBooks,
+  setCartBooks,
 }) => {
+  const {removeFromCart} = useContext(UserContext);
   const handleRemoveItem = (id) => {
-    setBooks((prev) => {
+    setCartBooks((prev) => {
       let updatedList = [];
       prev.forEach(element => {
         if(id !== element.book.id){

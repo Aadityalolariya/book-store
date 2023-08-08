@@ -7,29 +7,33 @@ import Signup from "./components/Signup/Signup";
 import Cart from "./components/Cart/Cart";
 import BookDetail from "./components/BookDetail/BookDetail.js";
 import axios from "axios";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
+import { UserContext } from "./components/UserContext";
 
 function App() {
-  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const [books, setBooks] = useState([]);
   const [cartItemCount, setCartItemCount] = useState(0);
-  const [cartBookIds, setCartBookIds] = useState(
-    () => JSON.parse(localStorage.getItem("cartBookIds")) || []
-  );
-  const [pageInfo, setPageInfo] = useState({ pageIndex: 1, totalPages: 0 });
 
+  const [pageInfo, setPageInfo] = useState({ pageIndex: 1, totalPages: 0 });
   useEffect(() => {
     const getCartItemCount = async () => {
       try {
         console.log(cookies.user.result.id);
-        const allCartItems = (await axios.get(`https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`)).data
+        const allCartItems = (
+          await axios.get(
+            `https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`
+          )
+        ).data;
         console.log(allCartItems.result);
         setCartItemCount(allCartItems.result.length);
       } catch (error) {
         console.log(error);
       }
     };
-    getCartItemCount()
+    if (cookies.user) {
+      getCartItemCount();
+    }
   }, []);
 
   const addToCart = async (bookId) => {
@@ -43,8 +47,7 @@ function App() {
           quantity: 1,
         }
       );
-      setCartItemCount((prev) => prev + 1)
-
+      setCartItemCount((prev) => prev + 1);
     } catch (error) {
       console.log(error);
     }
@@ -53,7 +56,9 @@ function App() {
   const removeFromCart = async (bookId) => {
     try {
       const allCartItems = (
-        await axios.get(`https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`)
+        await axios.get(
+          `https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`
+        )
       ).data;
       let cart_item_id = 0;
       allCartItems.result.forEach((element) => {
@@ -71,47 +76,34 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    localStorage.setItem("cartBookIds", JSON.stringify(cartBookIds));
-  }, [cartBookIds]);
-
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout cartCount={cartItemCount} />}>
-            <Route
-              path="/"
-              element={
-                <Home
-                  addToCart={addToCart}
-                  books={books}
-                  setBooks={setBooks}
-                  pageInfo={pageInfo}
-                  setPageInfo={setPageInfo}
-                />
-              }
-            ></Route>
-            <Route
-              path="/login"
-              element={<Login />}
-            ></Route>
-            <Route
-              path="/signup"
-              element={<Signup />}
-            ></Route>
-            <Route
-              path="/book"
-              element={<BookDetail addToCart={addToCart} />}
-            ></Route>
+      <UserContext.Provider
+        value={{
+          books,
+          setBooks,
+          cartItemCount,
+          setCartItemCount,
+          pageInfo,
+          setPageInfo,
+          addToCart,
+          removeFromCart,
+          cartItemCount
+        }}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout/>}>
+              <Route path="/" element={<Home />}></Route>
+              <Route path="/login" element={<Login />}></Route>
+              <Route path="/signup" element={<Signup />}></Route>
+              <Route path="/book" element={<BookDetail />}></Route>
 
-            <Route
-              path="/cart"
-              element={<Cart removeFromCart={removeFromCart} />}
-            ></Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+              <Route path="/cart" element={<Cart />}></Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </UserContext.Provider>
     </>
   );
 }

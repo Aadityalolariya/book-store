@@ -8,10 +8,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-
 import IconButton from "@mui/material/IconButton";
 
-export default function Filters({ setMinMax, search, setSearch, books }) {
+export default function Filters({ setMinMax, setSearch }) {
   const [price, setPrice] = useState("");
   const [searchText, setSearchText] = useState("");
 
@@ -33,7 +32,6 @@ export default function Filters({ setMinMax, search, setSearch, books }) {
       max = parseInt(newPrice.split("-")[1]);
       console.log(min, max);
     }
-
     setMinMax({ min: min, max: max });
   };
 

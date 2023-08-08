@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Badge from '@mui/material/Badge';
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -15,13 +14,15 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
+import { useContext } from "react";
 
 const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-const ResponsiveAppBar = ({ cartCount }) => {
+const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const {cartItemCount} = useContext(UserContext);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -34,9 +35,6 @@ const ResponsiveAppBar = ({ cartCount }) => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   return (
     <AppBar position="static">
@@ -134,7 +132,7 @@ const ResponsiveAppBar = ({ cartCount }) => {
                 onClick={handleOpenUserMenu}
                 sx={{ p: 0, marginRight: "2rem", marginTop: "4px" }}
               >
-                <Badge badgeContent={cartCount} color="success">
+                <Badge badgeContent={cartItemCount} color="success">
                   <AddShoppingCartIcon style={{ color: "white" }} />
                 </Badge>
               </IconButton>
