@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./Filters.module.css";
 import Paper from "@mui/material/Paper";
 import InputLabel from "@mui/material/InputLabel";
@@ -10,9 +10,10 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 
-export default function Filters({ setMinMax, setSearch }) {
+export default function Filters({ setMinMax, setSearch, books, setBooks, handleSortBy, sortBy }) {
   const [price, setPrice] = useState("");
   const [searchText, setSearchText] = useState("");
+  // const [sortBy, setSortBy] = useState("");
 
   const handlePriceChange = (event) => {
     setPrice(event.target.value);
@@ -80,6 +81,21 @@ export default function Filters({ setMinMax, setSearch }) {
             <MenuItem value="100-300">100-300</MenuItem>
             <MenuItem value="301-500">301-500</MenuItem>
             <MenuItem value=">500"> &gt;500</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ width: "200px" }}>
+          <InputLabel id="sorting">Sort by</InputLabel>
+          <Select
+            labelId="sorting"
+            id="simple-select-sorting"
+            value={sortBy}
+            label="Sort By"
+            onChange={handleSortBy}
+          >
+            <MenuItem value="id">Random</MenuItem>
+            <MenuItem value="price"> Price</MenuItem>
+            <MenuItem value="name">Book name</MenuItem>
           </Select>
         </FormControl>
       </Paper>
