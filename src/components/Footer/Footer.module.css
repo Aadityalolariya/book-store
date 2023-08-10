@@ -4,6 +4,9 @@
     justify-content: space-around;
     background-color: rgb(59, 59, 59);
     height: 20vh;
+    padding-bottom: 50px;
+    padding-top: 25px;
+    align-items: center;
 }
 
 .list > li{

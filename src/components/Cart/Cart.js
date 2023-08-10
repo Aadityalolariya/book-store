@@ -4,6 +4,9 @@ import style from "./Cart.module.css";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { UserContext } from "../UserContext";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Button from '@mui/material/Button';
 
 const Cart = () => {
   const [cartBooks, setCartBooks] = useState([]);
@@ -32,7 +35,14 @@ const Cart = () => {
   return (
     <div className={style.container}>
       {cartBooks.length === 0 ? (
-        <p>Cart is empty.</p>
+        <Alert severity="info"  className={style.alert} action={
+          <a href="/"><Button color="primary" size="small">
+            Explore Books
+          </Button></a>
+        }>
+        <AlertTitle>Info</AlertTitle>
+         Cart is empty..!
+      </Alert>
       ) : (
         cartBooks.map((element, index) => {
           return (

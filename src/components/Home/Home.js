@@ -5,10 +5,14 @@ import Filters from "./Filters/Filters";
 import { Pagination } from "@mui/material";
 import { UserContext } from "../UserContext";
 import axios from "axios";
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
+import Grid from "@mui/material/Grid";
 export default function Home() {
   const [search, setSearch] = useState("");
   const [minMax, setMinMax] = useState({ min: 0, max: Infinity });
   const [sortBy, setSortBy] = useState("");
+  const [loading,setLoading] = useState(true);
   const { books, setBooks, pageInfo, setPageInfo, addToCart } =
     useContext(UserContext);
 
@@ -37,13 +41,28 @@ export default function Home() {
           totalPages: data.result.totalPages,
         }));
         setBooks(data.result.items);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     getBookData();
   }, [pageInfo.pageIndex, search]);
-
+  if(loading)
+  return(
+    <Grid container wrap="wrap" sx={{mx:5}}>
+      {(loading ? Array.from(new Array(12)) : []).map((item, index) => (
+        <Box key={index} sx={{ width: 210, marginRight: 0.5, my: 5 }}>
+            <Skeleton variant="rectangular" width={210} height={118} />
+            <Box sx={{ pt: 0.5 }}>
+              <Skeleton />
+              <Skeleton width="60%" />
+              <Skeleton width="20%" />
+            </Box>
+        </Box>
+      ))}
+    </Grid>
+    )
   return (
     <>
       <Filters

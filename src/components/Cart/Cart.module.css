@@ -4,3 +4,12 @@
     grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
     min-height: 90vh;
 }
+
+.alert{
+    width: 100%;
+    padding: 20px;
+    height: fit-content;
+    margin: auto;
+    grid-column-start: 2;
+    grid-column-end: 5;
+}
