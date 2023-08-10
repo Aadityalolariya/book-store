@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -17,12 +18,21 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import { useContext } from "react";
 
-const pages = ["Products", "Pricing"];
+const pages = [
+  {
+    name: "Home",
+    to: "/",
+  },
+  {
+    name: "Admin",
+    to: "/admin",
+  }
+];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const {cartItemCount} = useContext(UserContext);
+  const { cartItemCount } = useContext(UserContext);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -41,24 +51,6 @@ const ResponsiveAppBar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -88,9 +80,15 @@ const ResponsiveAppBar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography href='/' textAlign="center">{page}</Typography>
+              {pages.map((page, i) => (
+                <MenuItem key={i} onClick={
+                  () => {
+                    handleCloseNavMenu();
+                  }
+                }>
+                  <Link to={page.to} >
+                    <Typography textAlign="center" style={{ textDecoration: "none", color: "white" }}>{page.name}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -112,16 +110,22 @@ const ResponsiveAppBar = () => {
               textDecoration: "none",
             }}
           >
-            LOGO
+            Home
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map((page, i) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={i}
+                onClick={
+                  () => {
+                    handleCloseNavMenu();
+                  }
+                }
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                <Link to={page.to} style={{ textDecoration: "none", color: "white" }}>
+                  {page.name}
+                </Link>
               </Button>
             ))}
           </Box>

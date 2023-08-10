@@ -6,6 +6,7 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Cart from "./components/Cart/Cart";
 import BookDetail from "./components/BookDetail/BookDetail.js";
+import Admin from "./components/Admin/Admin";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { UserContext } from "./components/UserContext";
@@ -98,7 +99,7 @@ function App() {
               <Route path="/login" element={<Login />}></Route>
               <Route path="/signup" element={<Signup />}></Route>
               <Route path="/book" element={<BookDetail />}></Route>
-
+              <Route path="/admin" element={<Admin />}></Route>
               <Route path="/cart" element={<Cart />}></Route>
             </Route>
           </Routes>

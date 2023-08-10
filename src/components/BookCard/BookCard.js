@@ -21,8 +21,8 @@ export default function BookCard({
 }) {
   const navigate = useNavigate();
   const handleCardClick = () => {
-   
-    navigate({pathname : "/book", search : `?id=${id}`});
+
+    navigate({ pathname: "/book", search: `?id=${id}` });
   };
   return (
     <Card
@@ -38,7 +38,7 @@ export default function BookCard({
       elevation={9}
     >
       <div onClick={handleCardClick}>
-        <CardMedia component="img" alt="N/A" height="auto" image={bookImage} />
+        <CardMedia component="img" className={styles.book_img} alt="N/A" height="auto" image={bookImage} />
         <CardContent className={styles.content}>
           <Typography
             gutterBottom
@@ -63,15 +63,17 @@ export default function BookCard({
           </Typography>
         </CardContent>
       </div>
-      <CardActions sx={{ padding: "0px" }}>
-        <Button
-          startIcon={<ShoppingCartIcon />}
-          sx={{ margin: "auto" }}
-          onClick={() => addToCart(id)}
-        >
-          Add to Cart
-        </Button>
-      </CardActions>
+      <div className={styles.cart_btn_wrap}>
+        <CardActions sx={{ padding: "0px" }} className={styles.cart_btn}>
+          <Button
+            startIcon={<ShoppingCartIcon />}
+            sx={{ margin: "auto" }}
+            onClick={() => addToCart(id)}
+          >
+            Add to Cart
+          </Button>
+        </CardActions>
+      </div>
     </Card>
   );
 }
