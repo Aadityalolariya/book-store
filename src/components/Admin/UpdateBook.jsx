@@ -69,7 +69,7 @@ const UpdateBook = ({ ubook, handleClose }) => {
               placeholder="Book Name"
               required
               value={book.name}
-              onChange={(e) => setBook({ ...book, name: e.target.value })}
+              onChange={(e) => setUpdateBook((prev) => ({ ...prev, name: e.target.value }))}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -78,7 +78,7 @@ const UpdateBook = ({ ubook, handleClose }) => {
               placeholder="Price"
               required
               value={book.price}
-              onChange={(e) => setBook({ ...book, price: e.target.value })}
+              onChange={(e) => setUpdateBook((prev) => ({ ...prev, price: e.target.value }))}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -87,7 +87,7 @@ const UpdateBook = ({ ubook, handleClose }) => {
               placeholder="Category"
               required
               value={book.category}
-              onChange={(e) => setBook({ ...book, category: e.target.value })}
+              onChange={(e) => setUpdateBook((prev) => ({ ...prev, category: e.target.value }))}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -98,7 +98,7 @@ const UpdateBook = ({ ubook, handleClose }) => {
               required
               value={book.description}
               onChange={(e) =>
-                setBook({ ...book, description: e.target.value })
+                setUpdateBook((prev) => ({ ...prev, description: e.target.value }))
               }
             />
           </Grid>
@@ -107,7 +107,7 @@ const UpdateBook = ({ ubook, handleClose }) => {
               type="file"
               placeholder="Image"
               onChange={(e) =>
-                setBook({ ...book, base64image: e.target.value })
+                setUpdateBook((prev) => ({ ...prev, base64image: e.target.value }))
               }
             />
           </Grid>

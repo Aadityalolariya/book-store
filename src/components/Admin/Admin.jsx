@@ -18,6 +18,7 @@ const Admin = () => {
       if (res.status === 200) {
         // set the book data
         setBook(res.data.result);
+        console.log(res.data.result);
         // open the modal
         setOpen(true);
       }

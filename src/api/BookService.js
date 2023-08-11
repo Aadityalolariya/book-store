@@ -25,6 +25,7 @@ class BookService {
 
     // Update book
     UpdateBook = async (book) => {
+        console.log(book);
         return await axios.put(`${API_URL}`, book);
     };
 }
