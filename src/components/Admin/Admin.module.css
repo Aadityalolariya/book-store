@@ -31,3 +31,27 @@
 .rbtn {
   border: 2px solid red;
 }
+
+input {
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 12px;
+  margin: 2px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: left;
+}
+
+input:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(102, 175, 233, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(102, 175, 233, 0.25);
+}
+
+.bookImg{
+  width: 150px;
+  height: 250px;
+  object-fit: fill;
+}
