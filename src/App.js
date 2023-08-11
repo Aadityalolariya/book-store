@@ -10,45 +10,25 @@ import Admin from "./components/Admin/Admin";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { UserContext } from "./components/UserContext";
-
+import { getCartItemCount, getCategoriesList } from "./utils/DataFetchingFunc";
+import { addItemToCart, removeItemFromCart } from "./utils/CartUpdateFunc";
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const [books, setBooks] = useState([]);
   const [cartItemCount, setCartItemCount] = useState(0);
-
+  const [categories, setCategories] = useState([]);
   const [pageInfo, setPageInfo] = useState({ pageIndex: 1, totalPages: 0 });
+
   useEffect(() => {
-    const getCartItemCount = async () => {
-      try {
-        console.log(cookies.user.result.id);
-        const allCartItems = (
-          await axios.get(
-            `https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`
-          )
-        ).data;
-        console.log(allCartItems.result);
-        setCartItemCount(allCartItems.result.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     if (cookies.user) {
-      getCartItemCount();
+      getCartItemCount(cookies, setCartItemCount);
     }
+    getCategoriesList(setCategories);
   }, []);
 
   const addToCart = async (bookId) => {
-    // if (!isInCart(id)) setCartBookIds([...cartBookIds, id]);
     try {
-      const dataFetched = await axios.post(
-        "https://book-e-sell-node-api.vercel.app/api/cart",
-        {
-          bookId: bookId,
-          userId: cookies.user.result.id,
-          quantity: 1,
-        }
-      );
-      setCartItemCount((prev) => prev + 1);
+      await addItemToCart(bookId, cookies, setCartItemCount);
     } catch (error) {
       console.log(error);
     }
@@ -56,22 +36,7 @@ function App() {
 
   const removeFromCart = async (bookId) => {
     try {
-      const allCartItems = (
-        await axios.get(
-          `https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`
-        )
-      ).data;
-      let cart_item_id = 0;
-      allCartItems.result.forEach((element) => {
-        if (bookId === element.bookId) {
-          cart_item_id = element.id;
-          return;
-        }
-      });
-      await axios.delete(
-        `https://book-e-sell-node-api.vercel.app/api/cart?id=${cart_item_id}`
-      );
-      setCartItemCount((prev) => prev - 1);
+      await removeItemFromCart(cookies, setCartItemCount, bookId);
     } catch (error) {
       console.log(error);
     }
@@ -89,12 +54,14 @@ function App() {
           setPageInfo,
           addToCart,
           removeFromCart,
-          cartItemCount
+          cartItemCount,
+          categories,
+          setCategories,
         }}
       >
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Layout/>}>
+            <Route path="/" element={<Layout />}>
               <Route path="/" element={<Home />}></Route>
               <Route path="/login" element={<Login />}></Route>
               <Route path="/signup" element={<Signup />}></Route>

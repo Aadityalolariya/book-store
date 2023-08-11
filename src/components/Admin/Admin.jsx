@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Modal, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Container from "@mui/material/Container";
@@ -7,10 +7,11 @@ import Toaster from "../../utils/Toaster";
 import styles from "./Admin.module.css";
 import AddBook from "./AddBook";
 import UpdateBook from "./UpdateBook";
+import { UserContext } from "../UserContext";
 
 const Admin = () => {
   const [book, setBook] = useState({});
-
+  const { categories, setCategories } = useContext(UserContext); 
   const handleUpdate = (id) => {
     // get the book by id
     BookService.GetBookById(id).then((res) => {

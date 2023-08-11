@@ -4,19 +4,19 @@ import BookCard from "../BookCard/BookCard.js";
 import Filters from "./Filters/Filters";
 import { Pagination } from "@mui/material";
 import { UserContext } from "../UserContext";
-import axios from "axios";
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
+import Box from "@mui/material/Box";
+import Skeleton from "@mui/material/Skeleton";
 import Grid from "@mui/material/Grid";
+import { getBookDataWithPagination } from "../../utils/DataFetchingFunc";
 export default function Home() {
   const [search, setSearch] = useState("");
   const [minMax, setMinMax] = useState({ min: 0, max: Infinity });
   const [sortBy, setSortBy] = useState("");
-  const [loading,setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { books, setBooks, pageInfo, setPageInfo, addToCart } =
     useContext(UserContext);
 
-  const handleSortBy = (event) => {
+  const handleSortBy = async (event) => {
     setSortBy(event.target.value);
     let dupBooks = books;
     dupBooks = dupBooks.sort((a, b) => {
@@ -28,41 +28,33 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const getBookData = async () => {
-      try {
-        const dataFetched = await axios.get(
-          `https://book-e-sell-node-api.vercel.app/api/book?pageSize=10&pageIndex=${
-            pageInfo.pageIndex
-          }${search.length > 0 ? `&keyword=${search}` : ""}`
-        );
-        const data = dataFetched.data;
-        setPageInfo((prev) => ({
-          ...prev,
-          totalPages: data.result.totalPages,
-        }));
-        setBooks(data.result.items);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
+    const getBooksData = async () => {
+      await getBookDataWithPagination(
+        pageInfo,
+        search,
+        setPageInfo,
+        setBooks,
+        setLoading
+      );
     };
-    getBookData();
+    getBooksData();
   }, [pageInfo.pageIndex, search]);
-  if(loading)
-  return(
-    <Grid container wrap="wrap" sx={{mx:5}}>
-      {(loading ? Array.from(new Array(12)) : []).map((item, index) => (
-        <Box key={index} sx={{ width: 210, marginRight: 0.5, my: 5 }}>
+  
+  if (loading)
+    return (
+      <Grid container wrap="wrap" sx={{ mx: 5 }}>
+        {(loading ? Array.from(new Array(12)) : []).map((item, index) => (
+          <Box key={index} sx={{ width: 210, marginRight: 0.5, my: 5 }}>
             <Skeleton variant="rectangular" width={210} height={118} />
             <Box sx={{ pt: 0.5 }}>
               <Skeleton />
               <Skeleton width="60%" />
               <Skeleton width="20%" />
             </Box>
-        </Box>
-      ))}
-    </Grid>
-    )
+          </Box>
+        ))}
+      </Grid>
+    );
   return (
     <>
       <Filters
