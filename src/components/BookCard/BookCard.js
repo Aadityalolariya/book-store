@@ -63,8 +63,8 @@ export default function BookCard({
           </Typography>
         </CardContent>
       </div>
-      <div className={styles.cart_btn_wrap}>
-        <CardActions sx={{ padding: "0px" }} className={styles.cart_btn}>
+      <div className={styles.cart_btn_wrap} style={{marginTop :'2rem'}}>
+        <CardActions sx={{ padding: "0px"}} className={styles.cart_btn}>
           <Button
             startIcon={<ShoppingCartIcon />}
             sx={{ margin: "auto" }}

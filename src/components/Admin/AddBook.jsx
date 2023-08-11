@@ -1,9 +1,18 @@
-import React, { useState } from "react";
-import { Container, Typography, Grid, Button } from "@mui/material";
+import React, { useContext, useState } from "react";
+import {
+  Container,
+  Typography,
+  Grid,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import styles from "./Admin.module.css";
 import BookService from "../../api/BookService";
 import Toaster from "../../utils/Toaster";
-
+import { UserContext } from "../UserContext";
 const AddBook = () => {
   const [book, setBook] = useState({
     name: "",
@@ -69,6 +78,7 @@ const AddBook = () => {
     const base64 = await convertToBase64(image);
     setBook({ ...book, base64image: base64 });
   };
+  const { categories } = useContext(UserContext);
 
   return (
     <Container style={{ margin: "20px" }}>
@@ -98,13 +108,29 @@ const AddBook = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <input
-              type="number"
-              placeholder="Category Id"
-              required
-              value={book.categoryId}
-              onChange={(e) => setBook({ ...book, categoryId: e.target.value })}
-            />
+            <FormControl required sx = {{width : '50%'}}>
+              <InputLabel id="categoryId-select">Category</InputLabel>
+              <Select
+                labelId="categoryId-select"
+                id="demo-simple-select"
+                onChange={(e) =>
+                  setBook((prev) => ({
+                    ...prev,
+                    categoryId: e.target.value,
+                  }))
+                }
+                value={book.categoryId}
+                label="Category"
+              >
+                {categories.map((element, index) => {
+                  return (
+                    <MenuItem value={element.categoryId}>
+                      {element.category}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
             <textarea

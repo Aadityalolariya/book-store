@@ -10,10 +10,9 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 
-export default function Filters({ setMinMax, setSearch, books, setBooks, handleSortBy, sortBy }) {
+export default function Filters({ setMinMax, setSearch, handleSortBy, sortBy }) {
   const [price, setPrice] = useState("");
   const [searchText, setSearchText] = useState("");
-  // const [sortBy, setSortBy] = useState("");
 
   const handlePriceChange = (event) => {
     setPrice(event.target.value);

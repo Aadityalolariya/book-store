@@ -7,6 +7,7 @@ import { UserContext } from "../UserContext";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Button from '@mui/material/Button';
+import CartService from "../../api/CartService";
 
 const Cart = () => {
   const [cartBooks, setCartBooks] = useState([]);
@@ -16,11 +17,7 @@ const Cart = () => {
   useEffect(() => {
     const getCartItems = async () => {
       try {
-        const allCartItems = (
-          await axios.get(
-            `https://book-e-sell-node-api.vercel.app/api/cart?userId=${cookies.user.result.id}`
-          )
-        ).data;
+        const allCartItems = await (await CartService.GetCartItems(cookies)).data;
         setCartBooks(allCartItems.result);
       } catch (error) {
         console.log(error);
@@ -29,7 +26,7 @@ const Cart = () => {
     if(cookies.user){
       getCartItems();
     }
-  }, []); // Make sure to run the effect whenever bookids change
+  }, []); 
 
 
   return (

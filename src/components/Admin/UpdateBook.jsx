@@ -1,17 +1,28 @@
-import React, { useState } from "react";
-import { Container, Typography, Grid, Button } from "@mui/material";
+import React, { useContext, useState } from "react";
+import {
+  Container,
+  Typography,
+  Grid,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import styles from "./Admin.module.css";
 import Toaster from "../../utils/Toaster";
 import BookService from "../../api/BookService";
+import { UserContext } from "../UserContext";
 
 const UpdateBook = ({ ubook, handleClose }) => {
+  const { categories } = useContext(UserContext);
   const [book, setBook] = useState(ubook);
 
   const [updatebook, setUpdateBook] = useState({
     id: book.id,
     name: book.name,
     price: book.price,
-    category: book.category,
+    categoryId: book.categoryId,
     description: book.description,
     base64image: book.base64image,
   });
@@ -56,7 +67,7 @@ const UpdateBook = ({ ubook, handleClose }) => {
 
   return (
     <Container style={{ margin: "20px" }}>
-        <Toaster />
+      <Toaster />
       <Typography variant="h4" align="center" color="text.secondary" paragraph>
         Update Book with id: {book.id}
       </Typography>
@@ -68,8 +79,10 @@ const UpdateBook = ({ ubook, handleClose }) => {
               type="text"
               placeholder="Book Name"
               required
-              value={book.name}
-              onChange={(e) => setBook({ ...book, name: e.target.value })}
+              value={updatebook.name}
+              onChange={(e) =>
+                setUpdateBook((prev) => ({ ...prev, name: e.target.value }))
+              }
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -77,18 +90,39 @@ const UpdateBook = ({ ubook, handleClose }) => {
               type="number"
               placeholder="Price"
               required
-              value={book.price}
-              onChange={(e) => setBook({ ...book, price: e.target.value })}
+              value={updatebook.price}
+              onChange={(e) =>
+                setUpdateBook((prev) => ({ ...prev, price: e.target.value }))
+              }
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <input
-              type="text"
-              placeholder="Category"
-              required
-              value={book.category}
-              onChange={(e) => setBook({ ...book, category: e.target.value })}
-            />
+            <FormControl required sx={{ width: "50%" }}>
+              <InputLabel id="categoryId-select">Category</InputLabel>
+              <Select
+                labelId="categoryId-select"
+                id="demo-simple-select"
+                onChange={(e) =>
+                  setUpdateBook((prev) => {
+                    console.log(e.target.value);
+                    return {
+                      ...prev,
+                      categoryId: e.target.value,
+                    };
+                  })
+                }
+                value={updatebook.categoryId}
+                label="Category"
+              >
+                {categories.map((element, index) => {
+                  return (
+                    <MenuItem value={element.categoryId}>
+                      {element.category}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
             <textarea
@@ -96,9 +130,12 @@ const UpdateBook = ({ ubook, handleClose }) => {
               rows="4"
               cols="50"
               required
-              value={book.description}
+              value={updatebook.description}
               onChange={(e) =>
-                setBook({ ...book, description: e.target.value })
+                setUpdateBook((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
               }
             />
           </Grid>
@@ -107,7 +144,10 @@ const UpdateBook = ({ ubook, handleClose }) => {
               type="file"
               placeholder="Image"
               onChange={(e) =>
-                setBook({ ...book, base64image: e.target.value })
+                setUpdateBook((prev) => ({
+                  ...prev,
+                  base64image: e.target.value,
+                }))
               }
             />
           </Grid>

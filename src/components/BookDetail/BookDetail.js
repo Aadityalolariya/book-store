@@ -19,6 +19,7 @@ export default function BookDetail() {
           )}`
         );
         const data = dataFetched.data;
+        console.log(data);
         setBookDetail(data.result);
       } catch (error) {
         console.log(error);
