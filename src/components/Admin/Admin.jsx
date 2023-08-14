@@ -8,32 +8,41 @@ import styles from "./Admin.module.css";
 import AddBook from "./AddBook";
 import UpdateBook from "./UpdateBook";
 import { UserContext } from "../UserContext";
+import AddCategory from "./AddCategory";
+import UpdateCategory from './UpdateCategory'
 
 const Admin = () => {
   const [book, setBook] = useState({});
-  const { categories, setCategories } = useContext(UserContext); 
+  const { categories, setCategories } = useContext(UserContext);
+  const [categoryUpdateId, setCategoryUpdateId] = useState(0);
+
   const handleUpdate = (id) => {
     // get the book by id
-    BookService.GetBookById(id).then((res) => {
-      // handle axios response with status code
-      if (res.status === 200) {
-        // set the book data
-        setBook(res.data.result);
-        console.log(res.data.result);
-        // open the modal
-        setOpen(true);
-      }
-    }).catch((err) => {
-      Toaster({
-        position: "top-right",
-        condition: "error",
-        msg: err.message,
+    BookService.GetBookById(id)
+      .then((res) => {
+        // handle axios response with status code
+        if (res.status === 200) {
+          // set the book data
+          setBook(res.data.result);
+          console.log(res.data.result);
+          // open the modal
+          setOpen(true);
+        }
+      })
+      .catch((err) => {
+        Toaster({
+          position: "top-right",
+          condition: "error",
+          msg: err.message,
+        });
       });
-    });
   };
 
   const [open, setOpen] = useState(false);
+  const [openCategory, setOpenCategory] = useState(false);
+
   const handleClose = () => setOpen(false);
+  const handleCategoryClose = () => setOpenCategory(false);
 
   const handleDelete = (id) => {
     BookService.DeleteBookById(id)
@@ -96,6 +105,7 @@ const Admin = () => {
     BookService.GetAllBooks()
       .then((res) => {
         setRows(res.data.result);
+        console.log(res.data.result);
       })
       .catch((err) => {
         Toaster({
@@ -104,8 +114,6 @@ const Admin = () => {
           msg: err,
         });
       });
-
-
   }, []);
 
   return (
@@ -117,6 +125,7 @@ const Admin = () => {
       </Typography>
       <Container>
         <DataGrid
+          getRowId={(element) => element.id}
           rows={rows}
           columns={columns}
           initialState={{
@@ -128,11 +137,16 @@ const Admin = () => {
           checkboxSelection={false}
         />
       </Container>
+
       <Container>
-        <AddBook />
+        <AddBook categories={categories} setOpenCategory={setOpenCategory}/>
       </Container>
 
-      {/* Update Modal */}
+      <Container sx={{ marginTop: "3rem" }}>
+        <AddCategory setCategoryUpdateId = {setCategoryUpdateId} categories={categories} setOpenCategory={setOpenCategory} />
+      </Container>
+
+      {/* Update book Modal */}
       <Container>
         <Modal
           open={open}
@@ -140,11 +154,32 @@ const Admin = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Container style={{
-            backgroundColor: "white",
-            padding: "20px",
-          }}>
-            <UpdateBook ubook={book} handleClose={handleClose}/>
+          <Container
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+            }}
+          >
+            <UpdateBook ubook={book} handleClose={handleClose} />
+          </Container>
+        </Modal>
+      </Container>
+
+      {/* update category modal */}
+      <Container>
+        <Modal
+          open={openCategory}
+          onClose={handleCategoryClose}
+          aria-labelledby="modal-category-title"
+          aria-describedby="modal-category-description"
+        >
+          <Container
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+            }}
+          >
+            <UpdateCategory categoryUpdateId = {categoryUpdateId}/>
           </Container>
         </Modal>
       </Container>

@@ -124,7 +124,7 @@ const AddBook = () => {
               >
                 {categories.map((element, index) => {
                   return (
-                    <MenuItem value={element.categoryId}>
+                    <MenuItem value={element.categoryId} key={`MenuItem_key_${index}`}>
                       {element.category}
                     </MenuItem>
                   );

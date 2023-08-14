@@ -32,8 +32,8 @@ export default function Footer() {
             
             <ul className={styles.list}>
                 <li><a href = '/'>Home</a></li>
-                <li><a href = '/'>Sign In</a></li>
-                <li><a href = '/'>Sign Up</a></li>
+                <li><a href = '/login'>Sign In</a></li>
+                <li><a href = '/signup'>Sign Up</a></li>
             </ul>
             <ul className={styles.list}>
                 <li><a href = '/cart'>Cart</a></li>
